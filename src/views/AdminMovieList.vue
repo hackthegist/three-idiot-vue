@@ -1,18 +1,28 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app id="admin-movie-list"><AdminMovies :movies="movies" /> </v-app>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import AdminMovies from "@/components/AdminMovies";
 
 export default {
-  name: 'home',
+  name: "admin-movie-list",
   components: {
-    HelloWorld
+    AdminMovies
+  },
+  data() {
+    return {
+      movies: [
+        {
+          title: "겨울 왕국 2",
+          rating: 5
+        },
+        {
+          title: "블랙 머니",
+          rating: 4.5
+        }
+      ]
+    };
   }
-}
+};
 </script>

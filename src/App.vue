@@ -1,36 +1,27 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link>|
-      <router-link to="/login">login</router-link>|
-      <router-link to="/admin-user-list">admin-user-list</router-link>|
-      <router-link to="/admin-movie-list">admin-movie-list</router-link>|
-      <router-link to="/movie-list">movie-list</router-link>|
-      <router-link to="/movie-detail">movie-detail</router-link>
-    </div>
-    <router-view />
-  </div>
+  <v-app id="app">
+    <Header />
+    <v-content>
+      <router-view />
+    </v-content>
+  </v-app>
 </template>
 
-<style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import Header from "./components/Header";
 
-#nav {
-  padding: 30px;
-}
+export default {
+  name: "App",
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+  components: {
+    Header
+  },
 
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+  data: () => ({
+    //
+  }),
+  created() {
+    this.$vuetify.theme.dark = true;
+  }
+};
+</script>

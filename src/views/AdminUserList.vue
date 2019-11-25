@@ -1,18 +1,28 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
-  </div>
+  <v-app id="admin-user-list"><AdminUsers :users="users" /> </v-app>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+import AdminUsers from "@/components/AdminUsers";
 
 export default {
-  name: "home",
+  name: "admin-user-list",
   components: {
-    HelloWorld
+    AdminUsers
+  },
+  data() {
+    return {
+      users: [
+        {
+          name: "John",
+          calories: 344
+        },
+        {
+          name: "Tony",
+          calories: 222
+        }
+      ]
+    };
   }
 };
 </script>

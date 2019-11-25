@@ -1,10 +1,10 @@
 <template>
-  <v-app id="login">
+  <v-app id="signup">
     <v-content>
       <v-container class="fill-height" fluid>
         <v-row align="start" justify="center">
           <v-col cols="12" sm="8" md="4">
-            <LoginForm />
+            <SignupForm />
           </v-col>
         </v-row>
       </v-container>
@@ -13,13 +13,13 @@
 </template>
 
 <script>
-import LoginForm from "@/components/LoginForm";
+import SignupForm from "@/components/SignupForm";
 
 export default {
-  name: "login",
+  name: "signup",
 
   components: {
-    LoginForm
+    SignupForm
   }
 };
 </script>
