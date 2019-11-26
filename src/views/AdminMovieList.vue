@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import axios from "axios";
+import router from "@/router";
 import AdminMovies from "@/components/AdminMovies";
 
 export default {
@@ -15,17 +17,26 @@ export default {
   data() {
     return {
       dialog: false,
-      movies: [
-        {
-          title: "겨울 왕국 2",
-          rating: 5
-        },
-        {
-          title: "블랙 머니",
-          rating: 4.5
-        }
-      ]
+      movies: []
     };
+  },
+  methods: {
+    getMovies() {
+      axios
+        .get("http://localhost:8000/3idiots/v1/movies/")
+        .then(res => console.log(res));
+    },
+    loggedIn() {
+      this.$session.start();
+
+      if (!this.$session.has("jwt")) {
+        router.push("/login");
+      }
+    }
+  },
+  mounted() {
+    this.loggedIn();
+    this.getMovies();
   }
 };
 </script>

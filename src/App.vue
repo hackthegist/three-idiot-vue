@@ -17,9 +17,6 @@ export default {
     Header
   },
 
-  data: () => ({
-    //
-  }),
   created() {
     this.$vuetify.theme.dark = true;
   }
