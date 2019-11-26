@@ -1,5 +1,7 @@
 <template>
-  <v-app id="admin-movie-list"><AdminMovies :movies="movies" /> </v-app>
+  <v-app id="admin-movie-list">
+    <AdminMovies :movies="movies" />
+  </v-app>
 </template>
 
 <script>
@@ -12,6 +14,7 @@ export default {
   },
   data() {
     return {
+      dialog: false,
       movies: [
         {
           title: "겨울 왕국 2",

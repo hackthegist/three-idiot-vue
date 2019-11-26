@@ -13,8 +13,10 @@
           <td width="40%">{{ user.name }}</td>
           <td width="40%">{{ user.calories }}</td>
           <td>
-            <v-btn text color="success">수정</v-btn>
-            <v-btn text color="error">삭제</v-btn>
+            <v-btn text outlined color="success">수정</v-btn>
+          </td>
+          <td>
+            <v-btn text outlined color="error">삭제</v-btn>
           </td>
         </tr>
       </tbody>
@@ -26,7 +28,7 @@
 export default {
   name: "admin-users",
   props: {
-    users: []
+    users: Array
   }
 };
 </script>

@@ -5,6 +5,10 @@
         <tr>
           <th class="text-left">제목</th>
           <th class="text-left">평점</th>
+          <th class="text-left">
+            <MovieCreateFormModal />
+          </th>
+          <th class="text-left"></th>
         </tr>
       </thead>
       <tbody>
@@ -12,9 +16,9 @@
           <td width="40%">{{ movie.title }}</td>
           <td width="40%">{{ movie.rating }}</td>
           <td>
-            <v-btn text color="success">수정</v-btn>
+            <v-btn text outlined color="success">수정</v-btn>
           </td>
-          <td><v-btn text color="error">삭제</v-btn></td>
+          <td><v-btn text outlined color="error">삭제</v-btn></td>
         </tr>
       </tbody>
     </v-simple-table>
@@ -22,10 +26,15 @@
 </template>
 
 <script>
+import MovieCreateFormModal from "@/components/MovieCreateFormModal";
+
 export default {
   name: "admin-movies",
+  components: {
+    MovieCreateFormModal
+  },
   props: {
-    movies: []
+    movies: Array
   }
 };
 </script>
