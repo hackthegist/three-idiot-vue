@@ -12,9 +12,12 @@
           id="email"
           label="이메일 주소"
           name="login"
-          type="text"
+          type="email"
           color="white"
           dark
+          clearable
+          :rules="[rules.required, rules.email]"
+          v-model="credentials.email"
         />
 
         <v-text-field
@@ -24,12 +27,19 @@
           type="password"
           color="white"
           dark
+          clearable
+          :rules="[rules.required]"
+          v-model="credentials.password"
         />
       </v-form>
     </v-card-text>
     <v-card-actions>
       <v-spacer />
-      <v-btn color="red black--text" light class="font-weight-bold"
+      <v-btn
+        color="red black--text"
+        light
+        class="font-weight-bold"
+        @click="login"
         >로그인</v-btn
       >
     </v-card-actions>
@@ -38,8 +48,44 @@
 </template>
 
 <script>
+// import axios from "axios";
+// import router from "@/router";
+
 export default {
-  name: "login-form"
+  name: "login-form",
+  data() {
+    return {
+      credentials: {},
+      rules: {
+        required: value => !!value || "필수 입력 사항입니다.",
+        email: value => {
+          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          return pattern.test(value) || "이메일 주소를 입력해주세요";
+        }
+      }
+    };
+  },
+  methods: {
+    login() {
+      const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (!this.credentials.email) {
+        alert("이메일 주소를 입력해주세요");
+      } else if (!this.credentials.password) {
+        alert("비밀번호를 입력해주세요");
+      } else if (!pattern.test(this.credentials.email)) {
+        alert("올바른 이메일 주소를 입력해주세요");
+      } else {
+        console.log(this.credentials);
+        //   axios.post('http://localhost:8000/api-token-auth/', this.credentials)
+        // .then(res => {
+        //   console.log(res.data.token)
+        //   this.$session.start()
+        //   this.$session.set('jwt', res.data.token)
+        //   router.push('/')
+        // })
+      }
+    }
+  }
 };
 </script>
 
