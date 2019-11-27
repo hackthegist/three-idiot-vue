@@ -1,8 +1,11 @@
 <template>
-  <v-app id="admin-user-list"><AdminUsers :users="users" /> </v-app>
+  <v-app app id="admin-user-list">
+    <AdminUsers :users="users" />
+  </v-app>
 </template>
 
 <script>
+import axios from "axios";
 import AdminUsers from "@/components/AdminUsers";
 
 export default {
@@ -12,17 +15,24 @@ export default {
   },
   data() {
     return {
-      users: [
-        {
-          name: "John",
-          calories: 344
-        },
-        {
-          name: "Tony",
-          calories: 222
-        }
-      ]
+      users: []
     };
+  },
+  methods: {
+    getUsers() {
+      const token = this.$session.get("jwt");
+      // const userId = JwtDecode(token).user_id;
+      const options = {
+        headers: { Authorization: `JWT ${token}` }
+      };
+      axios
+        .get("http://localhost:8000/api/v1/accounts/admin/", options)
+        .then(res => (this.users = res.data))
+        .then(res => console.log(res));
+    }
+  },
+  mounted() {
+    this.getUsers();
   }
 };
 </script>

@@ -6,7 +6,8 @@
 
 <script>
 import axios from "axios";
-import router from "@/router";
+// import router from "@/router";
+// import JwtDecode from "jwt-decode";
 import AdminMovies from "@/components/AdminMovies";
 
 export default {
@@ -22,20 +23,18 @@ export default {
   },
   methods: {
     getMovies() {
+      const token = this.$session.get("jwt");
+      // const userId = JwtDecode(token).user_id;
+      const options = {
+        headers: { Authorization: `JWT ${token}` }
+      };
       axios
-        .get("http://localhost:8000/3idiots/v1/movies/")
+        .get("http://localhost:8000/api/v1/movies/", options)
+        .then(res => (this.movies = res.data))
         .then(res => console.log(res));
-    },
-    loggedIn() {
-      this.$session.start();
-
-      if (!this.$session.has("jwt")) {
-        router.push("/login");
-      }
     }
   },
   mounted() {
-    this.loggedIn();
     this.getMovies();
   }
 };
