@@ -35,13 +35,7 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer />
-      <v-btn
-        color="red black--text"
-        light
-        class="font-weight-bold"
-        @click="login"
-        >로그인</v-btn
-      >
+      <v-btn color="red black--text" light class="font-weight-bold" @click="login">로그인</v-btn>
     </v-card-actions>
     <v-btn to="/signup" text color="white">혹시 아직 회원이 아니신가요?</v-btn>
   </v-card>
@@ -82,6 +76,7 @@ export default {
             console.log(res.data.token);
             this.$session.start();
             this.$session.set("jwt", res.data.token);
+            this.$emit("login");
             router.push("/");
           });
       }
