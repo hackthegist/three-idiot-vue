@@ -1,8 +1,13 @@
 <template>
-  <v-app id="admin-movie-list"><AdminMovies :movies="movies" /> </v-app>
+  <v-app id="admin-movie-list">
+    <AdminMovies :movies="movies" />
+  </v-app>
 </template>
 
 <script>
+import axios from "axios";
+// import router from "@/router";
+// import JwtDecode from "jwt-decode";
 import AdminMovies from "@/components/AdminMovies";
 
 export default {
@@ -12,17 +17,25 @@ export default {
   },
   data() {
     return {
-      movies: [
-        {
-          title: "겨울 왕국 2",
-          rating: 5
-        },
-        {
-          title: "블랙 머니",
-          rating: 4.5
-        }
-      ]
+      dialog: false,
+      movies: []
     };
+  },
+  methods: {
+    getMovies() {
+      const token = this.$session.get("jwt");
+      // const userId = JwtDecode(token).user_id;
+      const options = {
+        headers: { Authorization: `JWT ${token}` }
+      };
+      axios
+        .get("http://localhost:8000/api/v1/movies/", options)
+        .then(res => (this.movies = res.data))
+        .then(res => console.log(res));
+    }
+  },
+  mounted() {
+    this.getMovies();
   }
 };
 </script>
