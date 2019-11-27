@@ -43,8 +43,10 @@ export default {
     },
     logout() {
       this.$session.remove("jwt");
-      this.$emit("logout");
-      router.push("/login");
+      this.$session.remove("username");
+      this.$session.remove("isLogin");
+      this.$session.remove("is_staff");
+      router.push("/home");
     }
   }
 };

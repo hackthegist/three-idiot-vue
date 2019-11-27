@@ -24,7 +24,6 @@ export default {
   methods: {
     getMovies() {
       const token = this.$session.get("jwt");
-      // const userId = JwtDecode(token).user_id;
       const options = {
         headers: { Authorization: `JWT ${token}` }
       };

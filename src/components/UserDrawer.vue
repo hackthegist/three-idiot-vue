@@ -3,11 +3,11 @@
     <v-list dense>
       <v-subheader class="mt-4 grey--text text--darken-1">USER</v-subheader>
       <v-list>
-        <v-list-item v-for="item in items2" :key="item.text" link>
+        <v-list-item>
           <v-list-item-avatar>
-            <img :src="`https://randomuser.me/api/portraits/men/${item.picture}.jpg`" alt />
+            <img :src="`https://randomuser.me/api/portraits/men/${1}.jpg`" alt />
           </v-list-item-avatar>
-          <v-list-item-title v-text="item.text" />
+          <v-list-item-title class="font-weight-bold" v-text="username" />
         </v-list-item>
       </v-list>
       <v-subheader class="mt-4 grey--text text--darken-1">RECENTLY WATCHED</v-subheader>
@@ -50,7 +50,8 @@ export default {
     };
   },
   props: {
-    drawer: Boolean
+    drawer: Boolean,
+    username: String
   }
 };
 </script>

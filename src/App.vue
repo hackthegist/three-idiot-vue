@@ -1,15 +1,14 @@
 <template>
   <v-app id="app">
-    <Header @toggleDrawer="toggleDrawer" @logout :isStaff="user.isStaff" :isLogin="isLogin" />
-    <UserDrawer :drawer="drawer" />
+    <Header @toggleDrawer="toggleDrawer" @logout="logout" :isStaff="is_staff" :isLogin="isLogin" />
+    <UserDrawer :drawer="drawer" :username="username" />
     <v-content>
-      <router-view @login="login" />
+      <router-view :key="$route.fullPath" @loggedIn="setUserData" />
     </v-content>
   </v-app>
 </template>
 
 <script>
-import router from "@/router";
 import Header from "@/components/Header";
 import UserDrawer from "@/components/UserDrawer";
 
@@ -24,8 +23,9 @@ export default {
   data() {
     return {
       drawer: true,
-      user: {},
-      isLogin: false
+      username: "",
+      isLogin: false,
+      is_staff: false
     };
   },
 
@@ -33,24 +33,19 @@ export default {
     toggleDrawer() {
       this.drawer = !this.drawer;
     },
-    loggedIn() {
+    setUserData() {
       this.$session.start();
-      if (!this.$session.has("jwt")) {
-        this.isLogin = false;
-        router.push("/login");
-      }
+      this.isLogin = this.$session.get("isLogin") || false;
+      this.is_staff = this.$session.get("is_staff") || false;
+      this.username = this.$session.get("username") || "";
     },
-    login() {
-      this.user = { isStaff: false };
-      this.isLogin = true;
+    logout() {
+      this.isLogin = false;
     }
   },
 
   created() {
     this.$vuetify.theme.dark = true;
-  },
-  mounted() {
-    this.loggedIn();
   }
 };
 </script>
