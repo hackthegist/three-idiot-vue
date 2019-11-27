@@ -1,6 +1,6 @@
 <template>
   <v-app id="app">
-    <Header @toggleDrawer="toggleDrawer" :isStaff="user.isStaff" :isLogin="isLogin" />
+    <Header @toggleDrawer="toggleDrawer" @logout :isStaff="user.isStaff" :isLogin="isLogin" />
     <UserDrawer :drawer="drawer" />
     <v-content>
       <router-view @login="login" />
