@@ -21,6 +21,7 @@ export default {
         router.push("/login");
       } else {
         this.$emit("loggedIn");
+        router.push("/").catch(err => {});
       }
     }
   },

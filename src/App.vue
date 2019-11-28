@@ -1,6 +1,11 @@
 <template>
   <v-app id="app">
-    <Header @toggleDrawer="toggleDrawer" @logout="logout" :isStaff="is_staff" :isLogin="isLogin" />
+    <Header
+      @toggleDrawer="toggleDrawer"
+      @logout="setUserData"
+      :isStaff="is_staff"
+      :isLogin="isLogin"
+    />
     <UserDrawer :drawer="drawer" :username="username" />
     <v-content>
       <router-view :key="$route.fullPath" @loggedIn="setUserData" />
@@ -22,7 +27,7 @@ export default {
 
   data() {
     return {
-      drawer: true,
+      drawer: false,
       username: "",
       isLogin: false,
       is_staff: false
@@ -38,9 +43,6 @@ export default {
       this.isLogin = this.$session.get("isLogin") || false;
       this.is_staff = this.$session.get("is_staff") || false;
       this.username = this.$session.get("username") || "";
-    },
-    logout() {
-      this.isLogin = false;
     }
   },
 

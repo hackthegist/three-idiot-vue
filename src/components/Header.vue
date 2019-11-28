@@ -14,11 +14,13 @@
       </div>
       <v-btn text color="white" to="/login" v-if="!isLogin">로그인</v-btn>
       <v-btn text color="white" @click="logout" v-if="isLogin">로그아웃</v-btn>
-      <v-btn text color="white" to="/movie-list">내 취향 분석</v-btn>
-      <v-btn text color="white" to="/movie-list">추천 영화 보기</v-btn>
-      <v-btn @click="toggleDrawer">
-        <i class="fas fa-user"></i>
-      </v-btn>
+      <div v-show="isLogin">
+        <v-btn text color="white" to="/movie-select">내 취향 분석</v-btn>
+        <v-btn text color="white" to="/movie-list">추천 영화 보기</v-btn>
+        <v-btn @click="toggleDrawer">
+          <i class="fas fa-user"></i>
+        </v-btn>
+      </div>
     </v-app-bar>
   </header>
 </template>
@@ -46,7 +48,8 @@ export default {
       this.$session.remove("username");
       this.$session.remove("isLogin");
       this.$session.remove("is_staff");
-      router.push("/home");
+      this.$emit("logout");
+      router.push("/").catch(err => {});
     }
   }
 };

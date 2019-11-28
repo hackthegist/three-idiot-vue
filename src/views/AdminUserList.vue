@@ -21,14 +21,12 @@ export default {
   methods: {
     getUsers() {
       const token = this.$session.get("jwt");
-      // const userId = JwtDecode(token).user_id;
       const options = {
         headers: { Authorization: `JWT ${token}` }
       };
       axios
         .get("http://localhost:8000/api/v1/accounts/admin/", options)
-        .then(res => (this.users = res.data))
-        .then(res => console.log(res));
+        .then(res => (this.users = res.data));
     }
   },
   mounted() {

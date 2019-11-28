@@ -5,12 +5,17 @@
       <v-list>
         <v-list-item>
           <v-list-item-avatar>
-            <img :src="`https://randomuser.me/api/portraits/men/${1}.jpg`" alt />
+            <img
+              src="https://post-phinf.pstatic.net/MjAxNzA2MjhfMjM4/MDAxNDk4NjU2MzgyNzkz.483tLYhwuZWJkjlaoylJOmugikPrngLkrdD11Rw0m-Ag.9EuU6nAsgO_P8f1ZvfOlD3-5yazjQ5bEOeO55leuV20g.PNG/10.PNG?type=w1200"
+              alt
+            />
           </v-list-item-avatar>
           <v-list-item-title class="font-weight-bold" v-text="username" />
         </v-list-item>
       </v-list>
-      <v-subheader class="mt-4 grey--text text--darken-1">RECENTLY WATCHED</v-subheader>
+      <v-subheader class="mt-4 grey--text text--darken-1"
+        >RECENTLY WATCHED</v-subheader
+      >
       <v-list-item v-for="item in items" :key="item.text" link>
         <v-list-item-action>
           <v-icon>{{ item.icon }}</v-icon>
@@ -24,13 +29,17 @@
         <v-list-item-action>
           <v-icon color="grey darken-1">mdi-plus-circle-outline</v-icon>
         </v-list-item-action>
-        <v-list-item-title class="grey--text text--darken-1">Browse Channels</v-list-item-title>
+        <v-list-item-title class="grey--text text--darken-1"
+          >Browse Channels</v-list-item-title
+        >
       </v-list-item>
       <v-list-item link>
         <v-list-item-action>
           <v-icon color="grey darken-1">mdi-settings</v-icon>
         </v-list-item-action>
-        <v-list-item-title class="grey--text text--darken-1">Manage Subscriptions</v-list-item-title>
+        <v-list-item-title class="grey--text text--darken-1"
+          >Manage Subscriptions</v-list-item-title
+        >
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
@@ -56,5 +65,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

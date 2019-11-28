@@ -1,0 +1,40 @@
+<template>
+  <v-row class="d-flex">
+    <v-col v-for="movie in movies" :key="movie.id">
+      <MovieCard
+        v-animate-css.hover="'pulse'"
+        v-animate-css.click="'rubberBand'"
+        :movie="movie"
+        @click="select"
+      />
+    </v-col>
+  </v-row>
+</template>
+
+<script>
+import MovieCard from "@/components/MovieCard";
+
+export default {
+  name: "MovieCardRow",
+  components: {
+    MovieCard
+  },
+  data() {
+    return {};
+  },
+  props: {
+    movies: Array
+  },
+  methods: {
+    select(e) {
+      console.log(e.target);
+    }
+  }
+};
+</script>
+
+<style>
+.selected {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+</style>

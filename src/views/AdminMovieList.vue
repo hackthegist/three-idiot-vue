@@ -29,8 +29,7 @@ export default {
       };
       axios
         .get("http://localhost:8000/api/v1/movies/", options)
-        .then(res => (this.movies = res.data))
-        .then(res => console.log(res));
+        .then(res => (this.movies = res.data));
     }
   },
   mounted() {

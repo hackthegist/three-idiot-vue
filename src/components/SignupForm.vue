@@ -51,20 +51,30 @@
           clearable
           :rules="[rules.required]"
           v-model="credentials.password2"
+          @keyup.enter="signup"
         />
       </v-form>
     </v-card-text>
     <v-card-actions>
       <v-spacer />
-      <v-btn color="red black--text" light class="font-weight-bold" @click="signup">가입</v-btn>
+      <v-btn
+        color="red black--text"
+        light
+        class="font-weight-bold"
+        @click="signup"
+        >가입</v-btn
+      >
     </v-card-actions>
-    <v-btn to="/login" text color="white" class="text-center">지금 로그인하기</v-btn>
+    <v-btn to="/login" text color="white" class="text-center"
+      >지금 로그인하기</v-btn
+    >
   </v-card>
 </template>
 
 <script>
 import axios from "axios";
 import router from "@/router";
+import JwtDecode from "jwt-decode";
 export default {
   name: "signup-form",
   data() {
@@ -103,7 +113,22 @@ export default {
           )
           .then(res => {
             console.log(res.data);
-            router.push("/");
+            this.$session.start();
+            this.$session.set("jwt", res.data.token);
+
+            const token = res.data.token;
+            const userId = JwtDecode(token).user_id;
+            const options = {
+              headers: { Authorization: `JWT ${token}` }
+            };
+            axios
+              .get(`http://localhost:8000/api/v1/accounts/${userId}/`, options)
+              .then(res => {
+                this.$session.set("username", res.data.username);
+                this.$session.set("is_staff", res.data.is_staff);
+                this.$session.set("isLogin", true);
+                router.push("/").catch(err => {});
+              });
           });
       }
     }
