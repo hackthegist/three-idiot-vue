@@ -1,66 +1,70 @@
 <template>
-    <div class="movie-list">
-        <v-container>
-            <div style="height: 100px;"></div>
-            <MovieCardRow
-                v-for="movies in movies3"
-                :key="movies.id"
-                :movies="movies.movie"
-                @selected="appendSelected"
-            />
-            <v-btn @click="selectedAll">취향 분석 시작</v-btn>
-        </v-container>
-    </div>
+  <div class="movie-list">
+    <v-container>
+      <div style="height: 100px;"></div>
+      <MovieCardRow
+        v-for="movies in movies3"
+        :key="movies.id"
+        :movies="movies.movie"
+        @selected="appendSelected"
+      />
+      <v-row class="my-10" align="center" justify="center">
+        <v-btn @click="selectedAll" x-large>취향 분석 시작</v-btn>
+      </v-row>
+    </v-container>
+  </div>
 </template>
 
 <script>
 import axios from "axios";
+import router from "@/router";
 import MovieCardRow from "@/components/MovieCardRow";
 
 export default {
-    name: "MovieList",
-    components: {
-        MovieCardRow
+  name: "MovieList",
+  components: {
+    MovieCardRow
+  },
+  data() {
+    return {
+      movies3: [],
+      selectedMovies: []
+    };
+  },
+  methods: {
+    getMovies() {
+      const token = this.$session.get("jwt");
+      const options = {
+        headers: { Authorization: `JWT ${token}` }
+      };
+      axios
+        .get("http://localhost:8000/api/v1/movies/research/", options)
+        .then(res => {
+          const movies3 = [];
+          const movies = res.data;
+          for (let i = 0; i < 15; i += 3) {
+            const movie = {};
+            movie.id = i;
+            movie.movie = movies.slice(i, i + 3);
+            movies3.push(movie);
+          }
+          this.movies3 = movies3;
+        });
     },
-    data() {
-        return {
-            movies3: [],
-            selectedMovies: []
-        };
+    appendSelected(movie) {
+      console.log(movie);
+      this.selectedMovies.push(movie);
+      console.log(this.selectedMovies);
     },
-    methods: {
-        getMovies() {
-            const token = this.$session.get("jwt");
-            const options = {
-                headers: { Authorization: `JWT ${token}` }
-            };
-            axios
-                .get("http://localhost:8000/api/v1/movies/research/", options)
-                .then(res => {
-                    const movies3 = [];
-                    const movies = res.data;
-                    for (let i = 0; i < 15; i += 3) {
-                        const movie = {};
-                        movie.id = i;
-                        movie.movie = movies.slice(i, i + 3);
-                        movies3.push(movie);
-                    }
-                    this.movies3 = movies3;
-                });
-        },
-        appendSelected(movie) {
-            console.log(movie);
-            this.selectedMovies.push(movie);
-            console.log(this.selectedMovies);
-        },
-        selectedAll() {
-            this.$session.set("selected", this.selectedMovies);
-            // this.$emit('selected', this.selectedMovies)
-        }
-    },
-    mounted() {
-        this.$emit("loggedIn");
-        this.getMovies();
+    selectedAll() {
+      this.$session.set("selected", this.selectedMovies);
+      router.push("/movie-list").catch(err => {});
+      // this.$emit('selected', this.selectedMovies)
     }
+  },
+  mounted() {
+    this.$emit("loggedIn");
+    this.getMovies();
+  }
 };
 </script>
