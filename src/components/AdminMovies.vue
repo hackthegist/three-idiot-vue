@@ -16,9 +16,12 @@
           <td width="40%">{{ movie.title }}</td>
           <td width="40%">{{ movie.score }}</td>
           <td>
-            <v-btn text outlined color="success">수정</v-btn>
+            <MovieUpdateFormModal :movieId="movie.id" />
+            <!-- <v-btn text outlined color="success">수정</v-btn> -->
           </td>
-          <td><v-btn text outlined color="error">삭제</v-btn></td>
+          <td>
+            <v-btn text outlined :value-id="movie.id" color="error" @click="deleteMovie">삭제</v-btn>
+          </td>
         </tr>
       </tbody>
     </v-simple-table>
@@ -26,15 +29,37 @@
 </template>
 
 <script>
-import MovieCreateFormModal from "@/components/MovieCreateFormModal";
+import axios from "axios";
+import router from "@/router";
 
+import MovieCreateFormModal from "@/components/MovieCreateFormModal";
+import MovieUpdateFormModal from "@/components/MovieUpdateFormModal";
 export default {
   name: "admin-movies",
   components: {
-    MovieCreateFormModal
+    MovieCreateFormModal,
+    MovieUpdateFormModal
   },
   props: {
     movies: Array
+  },
+  methods: {
+    deleteMovie(e) {
+      const movieId = e.target.parentNode.getAttribute("value-id");
+      const token = this.$session.get("jwt");
+      const options = {
+        headers: { Authorization: `JWT ${token}` }
+      };
+      axios
+        .post(
+          `http://localhost:8000/api/v1/movies/${movieId}/delete/`,
+          {},
+          options
+        )
+        .then(res => {
+          router.push(`/admin-movie-list?${movieId}`).catch(err => {});
+        });
+    }
   }
 };
 </script>

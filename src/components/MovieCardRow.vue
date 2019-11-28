@@ -5,7 +5,7 @@
         v-animate-css.hover="'pulse'"
         v-animate-css.click="'rubberBand'"
         :movie="movie"
-        @click.native="select"
+        @click.native="select(movie)"
       />
     </v-col>
   </v-row>
@@ -26,8 +26,8 @@ export default {
     movies: Array
   },
   methods: {
-    select(e) {
-      console.log(e.target);
+    select(movie) {
+      this.$emit("selected", movie);
     }
   }
 };

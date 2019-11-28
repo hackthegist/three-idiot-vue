@@ -2,12 +2,12 @@
   <div>
     <v-dialog v-model="dialog" width="500">
       <template v-slot:activator="{ on }">
-        <v-btn text outlined color="primary" dark v-on="on">등록</v-btn>
+        <v-btn text outlined color="success" dark v-on="on">수정</v-btn>
       </template>
 
       <v-card>
         <v-card-title class="headline black d-flex justify-space-between" primary-title>
-          새 영화
+          영화 정보 수정
           <v-btn color="black" @click="dialog = false">
             <v-icon color="white">mdi-close</v-icon>
           </v-btn>
@@ -224,7 +224,7 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" text outlined @click="createMovie">등록</v-btn>
+          <v-btn color="success" text outlined @click="updateMovie">수정</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -236,7 +236,7 @@ import axios from "axios";
 import router from "@/router";
 
 export default {
-  name: "MovieCreateFormModal",
+  name: "MovieUpdateFormModal",
   data() {
     return {
       dialog: false,
@@ -246,15 +246,28 @@ export default {
       }
     };
   },
+  props: {
+    movieId: Number
+  },
   methods: {
-    createMovie() {
+    getPrevMovie() {
+      const token = this.$session.get("jwt");
+      const options = {
+        headers: { Authorization: `JWT ${token}` }
+      };
+      axios
+        .get(`http://localhost:8000/api/v1/movies/${this.movieId}/`, options)
+        .then(res => (this.movie = res.data));
+    },
+    updateMovie(e) {
+      const movieId = e.target.parentNode.getAttribute("value-id");
       const token = this.$session.get("jwt");
       const options = {
         headers: { Authorization: `JWT ${token}` }
       };
       axios
         .post(
-          "http://localhost:8000/api/v1/movies/create/",
+          `http://localhost:8000/api/v1/movies/${this.movieId}/update/`,
           this.movie,
           options
         )
@@ -262,6 +275,9 @@ export default {
           router.push(`/admin-movie-list?${Date.now()}`).catch(err => {})
         );
     }
+  },
+  mounted() {
+    this.getPrevMovie();
   }
 };
 </script>
