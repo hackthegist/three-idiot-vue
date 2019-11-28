@@ -5,7 +5,7 @@
         v-animate-css.hover="'pulse'"
         v-animate-css.click="'rubberBand'"
         :movie="movie"
-        @click="select"
+        @click.native="select"
       />
     </v-col>
   </v-row>
