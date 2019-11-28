@@ -1,13 +1,11 @@
 <template>
   <v-app id="admin-movie-list">
-    <AdminMovies :movies="movies" />
+    <AdminMovies :movies="movies" @updated="getMovies" />
   </v-app>
 </template>
 
 <script>
 import axios from "axios";
-// import router from "@/router";
-// import JwtDecode from "jwt-decode";
 import AdminMovies from "@/components/AdminMovies";
 
 export default {
@@ -23,15 +21,14 @@ export default {
   },
   methods: {
     getMovies() {
+      this.$emit("loggedIn");
       const token = this.$session.get("jwt");
-      // const userId = JwtDecode(token).user_id;
       const options = {
         headers: { Authorization: `JWT ${token}` }
       };
       axios
         .get("http://localhost:8000/api/v1/movies/", options)
-        .then(res => (this.movies = res.data))
-        .then(res => console.log(res));
+        .then(res => (this.movies = res.data));
     }
   },
   mounted() {

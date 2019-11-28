@@ -5,8 +5,8 @@ import Signup from '@/views/Signup.vue'
 import Login from '@/views/Login.vue'
 import AdminUserList from '@/views/AdminUserList.vue'
 import AdminMovieList from '@/views/AdminMovieList.vue'
+import MovieSelect from '@/views/MovieSelect.vue'
 import MovieList from '@/views/MovieList.vue'
-import MovieDetail from '@/views/MovieDetail.vue'
 
 Vue.use(VueRouter)
 
@@ -36,14 +36,14 @@ const routes = [{
     component: AdminMovieList
   },
   {
+    path: '/movie-select',
+    name: 'movie-select',
+    component: MovieSelect
+  },
+  {
     path: '/movie-list',
     name: 'movie-list',
     component: MovieList
-  },
-  {
-    path: '/movie-detail',
-    name: 'movie-detail',
-    component: MovieDetail
   },
 
 ]

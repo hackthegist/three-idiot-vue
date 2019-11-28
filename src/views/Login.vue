@@ -4,7 +4,7 @@
       <v-container class="fill-height" fluid>
         <v-row align="start" justify="center">
           <v-col cols="12" sm="8" md="4">
-            <LoginForm @login="login" />
+            <LoginForm />
           </v-col>
         </v-row>
       </v-container>
@@ -21,10 +21,6 @@ export default {
   components: {
     LoginForm
   },
-  methods: {
-    login() {
-      this.$emit("login");
-    }
-  }
+  methods: {}
 };
 </script>
