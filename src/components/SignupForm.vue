@@ -6,27 +6,27 @@
     </v-toolbar>
     <v-divider color="red"></v-divider>
     <v-card-text>
-      <v-form color="white">
+      <v-form color="white" @submit.prevent="signup(credentials)">
         <v-text-field
-          id="suername"
+          id="username"
           label="이름"
           name="username"
           type="text"
           color="white"
           dark
           clearable
-          :rules="[rules.required]"
+          :rules="[requiredRule]"
           v-model="credentials.username"
         />
         <v-text-field
           id="email"
           label="이메일 주소"
-          name="login"
+          name="email"
           type="text"
           color="white"
           dark
           clearable
-          :rules="[rules.required, rules.email]"
+          :rules="[requiredRule, emailRule]"
           v-model="credentials.email"
         />
 
@@ -38,7 +38,7 @@
           color="white"
           dark
           clearable
-          :rules="[rules.required]"
+          :rules="[requiredRule]"
           v-model="credentials.password1"
         />
         <v-text-field
@@ -49,90 +49,31 @@
           color="white"
           dark
           clearable
-          :rules="[rules.required]"
+          :rules="[requiredRule]"
           v-model="credentials.password2"
-          @keyup.enter="signup"
         />
+        <v-card-actions>
+          <v-spacer />
+          <v-btn type="submit" color="red black--text" light class="font-weight-bold">가입</v-btn>
+        </v-card-actions>
       </v-form>
     </v-card-text>
-    <v-card-actions>
-      <v-spacer />
-      <v-btn
-        color="red black--text"
-        light
-        class="font-weight-bold"
-        @click="signup"
-        >가입</v-btn
-      >
-    </v-card-actions>
-    <v-btn to="/login" text color="white" class="text-center"
-      >지금 로그인하기</v-btn
-    >
+
+    <v-btn :to="{ name: 'login' }" text color="white" class="text-center">지금 로그인하기</v-btn>
   </v-card>
 </template>
 
 <script>
-import axios from "axios";
-import router from "@/router";
-import JwtDecode from "jwt-decode";
+import { mapState, mapActions } from "vuex";
 export default {
   name: "signup-form",
   data() {
     return {
-      credentials: {},
-      rules: {
-        required: value => !!value || "필수 입력 사항입니다.",
-        email: value => {
-          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-          return pattern.test(value) || "이메일 주소를 입력해주세요";
-        }
-      }
+      credentials: {}
     };
   },
-  methods: {
-    signup() {
-      const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      if (!this.credentials.email) {
-        alert("이메일 주소를 입력해주세요");
-      } else if (!this.credentials.password1) {
-        alert("비밀번호를 입력해주세요");
-      } else if (!this.credentials.password2) {
-        alert("비밀번호 확인을 입력해주세요");
-      } else if (!this.credentials.username) {
-        alert("사용자 이름를 입력해주세요");
-      } else if (!pattern.test(this.credentials.email)) {
-        alert("올바른 이메일 주소를 입력해주세요");
-      } else if (this.credentials.password1 !== this.credentials.password2) {
-        alert("비밀번호가 서로 다릅니다.");
-      } else {
-        console.log(this.credentials);
-        axios
-          .post(
-            "http://localhost:8000/api/v1/accounts/signup/",
-            this.credentials
-          )
-          .then(res => {
-            console.log(res.data);
-            this.$session.start();
-            this.$session.set("jwt", res.data.token);
-
-            const token = res.data.token;
-            const userId = JwtDecode(token).user_id;
-            const options = {
-              headers: { Authorization: `JWT ${token}` }
-            };
-            axios
-              .get(`http://localhost:8000/api/v1/accounts/${userId}/`, options)
-              .then(res => {
-                this.$session.set("username", res.data.username);
-                this.$session.set("is_staff", res.data.is_staff);
-                this.$session.set("isLogin", true);
-                router.push("/").catch(err => {});
-              });
-          });
-      }
-    }
-  }
+  computed: mapState("user", ["requiredRule", "emailRule"]),
+  methods: mapActions("user", ["signup"])
 };
 </script>
 
