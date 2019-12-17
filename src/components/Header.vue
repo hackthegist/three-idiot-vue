@@ -36,8 +36,8 @@ export default {
     };
   },
   props: {
-    isStaff: Boolean,
-    isLogin: Boolean
+    // isStaff: Boolean,
+    // isLogin: Boolean
   },
   methods: {
     toggleDrawer() {
