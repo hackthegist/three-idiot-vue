@@ -5,11 +5,11 @@
 </template>
 
 <script>
-import axios from "axios";
-import AdminMovies from "@/components/AdminMovies";
+import axios from 'axios'
+import AdminMovies from '@/components/AdminMovies'
 
 export default {
-  name: "admin-movie-list",
+  name: 'admin-movie-list',
   components: {
     AdminMovies
   },
@@ -17,22 +17,22 @@ export default {
     return {
       dialog: false,
       movies: []
-    };
+    }
   },
   methods: {
     getMovies() {
-      this.$emit("loggedIn");
-      const token = this.$session.get("jwt");
+      this.$emit('loggedIn')
+      const token = this.$session.get('jwt')
       const options = {
         headers: { Authorization: `JWT ${token}` }
-      };
+      }
       axios
-        .get("http://localhost:8000/api/v1/movies/", options)
-        .then(res => (this.movies = res.data));
+        .get('http://localhost:8000/api/v1/movies/', options)
+        .then(res => (this.movies = res.data))
     }
   },
   mounted() {
-    this.getMovies();
+    this.$store.dispatch('user/requireAuth')
   }
-};
+}
 </script>

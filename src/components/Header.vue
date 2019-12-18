@@ -8,49 +8,34 @@
         </v-btn>
       </v-toolbar-title>
       <v-spacer />
-      <div v-show="isStaff">
-        <v-btn text color="white" to="/admin-movie-list">영화 관리</v-btn>
+      <template v-if="user.is_staff">
+        <v-btn text color="white" :to="{ name: 'admin-movie-list'}">영화 관리</v-btn>
         <v-btn text color="white" to="/admin-user-list">유저 관리</v-btn>
-      </div>
-      <v-btn text color="white" to="/login" v-if="!isLogin">로그인</v-btn>
-      <v-btn text color="white" @click="logout" v-if="isLogin">로그아웃</v-btn>
-      <div v-show="isLogin">
+      </template>
+      <v-btn text color="white" :to="{ name: 'login' }" v-if="!user.isLoggedIn">로그인</v-btn>
+      <v-btn text color="white" @click="logout" v-if="user.isLoggedIn">로그아웃</v-btn>
+      <template v-if="user.isLoggedIn">
         <v-btn text color="white" to="/movie-select">내 취향 분석</v-btn>
         <v-btn text color="white" to="/movie-list">추천 영화 보기</v-btn>
         <v-btn @click="toggleDrawer">
           <i class="fas fa-user"></i>
         </v-btn>
-      </div>
+      </template>
     </v-app-bar>
   </header>
 </template>
 
 <script>
-// import router from "@/router";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "Header",
-  data() {
-    return {
-      show: "hidden"
-    };
-  },
-  props: {
-    // isStaff: Boolean,
-    // isLogin: Boolean
-  },
+  computed: mapState("user", ["user"]),
   methods: {
     toggleDrawer() {
       this.$emit("toggleDrawer");
-    }
-    // logout() {
-    //     this.$session.remove("jwt");
-    //     this.$session.remove("username");
-    //     this.$session.remove("isLogin");
-    //     this.$session.remove("is_staff");
-    //     this.$emit("logout");
-    //     router.push("/").catch(err => {});
-    // }
+    },
+    ...mapActions("user", ["logout"])
   }
 };
 </script>
