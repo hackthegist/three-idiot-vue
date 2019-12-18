@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import AdminMovies from '@/components/AdminMovies'
 
 export default {
@@ -15,8 +14,7 @@ export default {
   },
   data() {
     return {
-      dialog: false,
-      movies: []
+      dialog: false
     }
   },
   methods: {

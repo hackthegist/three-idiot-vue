@@ -97,7 +97,7 @@ export const actions = {
       commit('SET_USERS', res.data)
     })
   },
-  deleteUserFromList({ commit, dispatch }, userId) {
+  deleteUserFromList({ commit }, userId) {
     UserService.deleteUser(userId)
       .then(() => {
         commit('DELETE_USER', userId)
