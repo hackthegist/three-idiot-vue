@@ -1,6 +1,6 @@
 <template>
   <v-app id="admin-movie-list">
-    <AdminMovies :movies="movies" @updated="getMovies" />
+    <AdminMovies />
   </v-app>
 </template>
 
@@ -15,18 +15,6 @@ export default {
   data() {
     return {
       dialog: false
-    }
-  },
-  methods: {
-    getMovies() {
-      this.$emit('loggedIn')
-      const token = this.$session.get('jwt')
-      const options = {
-        headers: { Authorization: `JWT ${token}` }
-      }
-      axios
-        .get('http://localhost:8000/api/v1/movies/', options)
-        .then(res => (this.movies = res.data))
     }
   },
   mounted() {
