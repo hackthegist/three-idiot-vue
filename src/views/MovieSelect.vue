@@ -16,12 +16,13 @@
 </template>
 
 <script>
-import axios from "axios";
-import router from "@/router";
-import MovieCardRow from "@/components/MovieCardRow";
+import { mapActions } from 'vuex'
+import axios from 'axios'
+import router from '@/router'
+import MovieCardRow from '@/components/MovieCardRow'
 
 export default {
-  name: "MovieList",
+  name: 'MovieList',
   components: {
     MovieCardRow
   },
@@ -29,42 +30,24 @@ export default {
     return {
       movies3: [],
       selectedMovies: []
-    };
-  },
-  methods: {
-    getMovies() {
-      const token = this.$session.get("jwt");
-      const options = {
-        headers: { Authorization: `JWT ${token}` }
-      };
-      axios
-        .get("http://localhost:8000/api/v1/movies/research/", options)
-        .then(res => {
-          const movies3 = [];
-          const movies = res.data;
-          for (let i = 0; i < 15; i += 3) {
-            const movie = {};
-            movie.id = i;
-            movie.movie = movies.slice(i, i + 3);
-            movies3.push(movie);
-          }
-          this.movies3 = movies3;
-        });
-    },
-    appendSelected(movie) {
-      console.log(movie);
-      this.selectedMovies.push(movie);
-      console.log(this.selectedMovies);
-    },
-    selectedAll() {
-      this.$session.set("selected", this.selectedMovies);
-      router.push("/movie-list").catch(err => {});
-      // this.$emit('selected', this.selectedMovies)
     }
   },
+  methods: {
+    appendSelected(movie) {
+      console.log(movie)
+      this.selectedMovies.push(movie)
+      console.log(this.selectedMovies)
+    },
+    selectedAll() {
+      this.$session.set('selected', this.selectedMovies)
+      router.push('/movie-list').catch(err => {})
+      // this.$emit('selected', this.selectedMovies)
+    },
+    ...mapActions('movies', ['getMoviesToSelect'])
+  },
   mounted() {
-    this.$emit("loggedIn");
-    this.getMovies();
+    this.$emit('loggedIn')
+    this.getMovies()
   }
-};
+}
 </script>

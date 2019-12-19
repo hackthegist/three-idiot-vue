@@ -3,7 +3,8 @@ import MovieService from '@/services/MovieService'
 export const namespaced = true
 
 export const state = {
-  movies: []
+  movies: [],
+  moviesToSelect: []
 }
 
 export const mutations = {
@@ -12,6 +13,9 @@ export const mutations = {
   },
   DELETE_MOVIE(state, movieId) {
     state.movies = state.movies.filter(movie => movie.id !== movieId)
+  },
+  SET_MOVIES_TO_SELECT(state, moviesToSelect) {
+    state.moviesToSelect = moviesToSelect
   }
 }
 
@@ -26,15 +30,25 @@ export const actions = {
       })
   },
 
-deleteMovieFromList({ commit }, userId) {
-    UserService.deleteUser(userId)
+  deleteMovieFromList({ commit }, movieId) {
+    MovieService.deleteMovie(movieId)
       .then(() => {
-        commit('DELETE_USER', userId)
+        commit('DELETE_MOVIE', movieId)
       })
       .catch(() => {
-        alert('유저 삭제 중 오류가 발생했습니다')
+        alert('영화 삭제 중 오류가 발생했습니다')
       })
     // dispatch('getUserList')
   },
+  getMoviesToSelect({ commit }) {
+    MovieService.fetchMoviesToSelect()
+      .then(res => {
+        commit('SET_MOVIES_TO_SELECT', res.data)
+      })
+      .catch(() => {
+        alert('선택할 영화 정보를 가져오는데 실패했습니다.')
+      })
+  }
+}
 
 export const getters = {}
