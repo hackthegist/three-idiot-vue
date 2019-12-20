@@ -14,7 +14,7 @@
         </v-card-title>
 
         <v-card-text>
-          <v-form color="white">
+          <v-form color="white" @submit.prevent="createMovie(movieToAdd)">
             <v-text-field
               id="title"
               label="영화 제목"
@@ -23,8 +23,8 @@
               color="white"
               dark
               clearable
-              :rules="[rules.required]"
-              v-model="movie.title"
+              :rules="[requiredRule]"
+              v-model="movieToAdd.title"
             />
 
             <v-textarea
@@ -35,8 +35,8 @@
               color="white"
               dark
               clearable
-              :rules="[rules.required]"
-              v-model="movie.summary"
+              :rules="[requiredRule]"
+              v-model="movieToAdd.summary"
             />
             <v-text-field
               id="directorNm"
@@ -46,20 +46,30 @@
               color="white"
               dark
               clearable
-              :rules="[rules.required]"
-              v-model="movie.directorNm"
+              :rules="[requiredRule]"
+              v-model="movieToAdd.directorNm"
             />
+            <div id="example-3">
+              <input type="checkbox" id="1" value="2" v-model="checkedNames" />
+              <label for="1">로맨스</label>
+              <input type="checkbox" id="2" value="2" v-model="checkedNames" />
+              <label for="2">판타지</label>
+              <input type="checkbox" id="3" value="3" v-model="checkedNames" />
+              <label for="3">미스터리</label>
+              <br />
+              <span>체크한 이름: {{ checkedNames }}</span>
+            </div>
             <v-text-field
-              id="genresNm"
+              id="genresCds"
               label="장르"
-              name="genresNm"
+              name="genresCds"
               type="text"
               color="white"
               hint="'|'를 이용하여 여러 배우명을 입력해주세요"
               dark
               clearable
-              :rules="[rules.required]"
-              v-model="movie.genresNm"
+              :rules="[requiredRule]"
+              v-model="movieToAdd.genresNm"
             />
             <!-- <v-row align="center">
               <v-col class="d-flex" v-model="movie.genreNm" cols="12" sm="6">
@@ -76,8 +86,8 @@
               max="2019"
               dark
               clearable
-              :rules="[rules.required]"
-              v-model="movie.prdtYear"
+              :rules="[requiredRule]"
+              v-model="movieToAdd.prdtYear"
             />
             <v-text-field
               id="openDt"
@@ -87,8 +97,8 @@
               color="white"
               dark
               clearable
-              :rules="[rules.required]"
-              v-model="movie.openDt"
+              :rules="[requiredRule]"
+              v-model="movieToAdd.openDt"
             />
             <v-text-field
               id="showTm"
@@ -98,8 +108,8 @@
               color="white"
               dark
               clearable
-              :rules="[rules.required]"
-              v-model="movie.showTm"
+              :rules="[requiredRule]"
+              v-model="movieToAdd.showTm"
             />
             <v-text-field
               id="nationNm"
@@ -109,8 +119,8 @@
               color="white"
               dark
               clearable
-              :rules="[rules.required]"
-              v-model="movie.nationNm"
+              :rules="[requiredRule]"
+              v-model="movieToAdd.nationNm"
             />
             <v-text-field
               id="actorsNm"
@@ -121,8 +131,8 @@
               hint="'|'를 이용하여 여러 배우명을 입력해주세요 예시) 유해진|조진웅|이서진|염정아|김지수"
               dark
               clearable
-              :rules="[rules.required]"
-              v-model="movie.actorsNm"
+              :rules="[requiredRule]"
+              v-model="movieToAdd.actorsNm"
             />
             <v-text-field
               id="watchGradeNm"
@@ -133,8 +143,8 @@
               hint="예시) 12세이상관람가"
               dark
               clearable
-              :rules="[rules.required]"
-              v-model="movie.watchGradeNm"
+              :rules="[requiredRule]"
+              v-model="movieToAdd.watchGradeNm"
             />
             <v-text-field
               id="companyNmDict"
@@ -144,8 +154,8 @@
               color="white"
               dark
               clearable
-              :rules="[rules.required]"
-              v-model="movie.companyNmDict"
+              :rules="[requiredRule]"
+              v-model="movieToAdd.companyNmDict"
             />
             <v-text-field
               id="link"
@@ -155,8 +165,8 @@
               color="white"
               dark
               clearable
-              :rules="[rules.required]"
-              v-model="movie.link"
+              :rules="[requiredRule]"
+              v-model="movieToAdd.link"
             />
             <v-text-field
               id="image"
@@ -166,8 +176,8 @@
               color="white"
               dark
               clearable
-              :rules="[rules.required]"
-              v-model="movie.image"
+              :rules="[requiredRule]"
+              v-model="movieToAdd.image"
             />
             <v-text-field
               id="userRating"
@@ -178,8 +188,8 @@
               hint="예시) 7.88"
               dark
               clearable
-              :rules="[rules.required]"
-              v-model="movie.userRating"
+              :rules="[requiredRule]"
+              v-model="movieToAdd.userRating"
             />
             <v-text-field
               id="audiAcc"
@@ -189,8 +199,8 @@
               color="white"
               dark
               clearable
-              :rules="[rules.required]"
-              v-model="movie.audiAcc"
+              :rules="[requiredRule]"
+              v-model="movieToAdd.audiAcc"
             />
             <v-text-field
               id="thumbsNm"
@@ -201,8 +211,8 @@
               hint="'|'를 이용하여 여러 영화명을 입력해주세요 예시) 로켓맨|싱 스트리트|위대한 쇼맨|라라랜드|브로드웨이 4D"
               dark
               clearable
-              :rules="[rules.required]"
-              v-model="movie.thumbsNm"
+              :rules="[requiredRule]"
+              v-model="movieToAdd.thumbsNm"
             />
             <v-text-field
               id="thumbsImage"
@@ -213,8 +223,8 @@
               hint="'|'를 이용하여 여러 URL을 입력해주세요"
               dark
               clearable
-              :rules="[rules.required]"
-              v-model="movie.thumbsImage"
+              :rules="[requiredRule]"
+              v-model="movieToAdd.thumbsImage"
               @keyup.enter="createMovie"
             />
           </v-form>
@@ -224,7 +234,7 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" text outlined @click="createMovie">등록</v-btn>
+          <v-btn color="primary" type="submit" text outlined>등록</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -232,38 +242,19 @@
 </template>
 
 <script>
-import axios from "axios";
-import router from "@/router";
+import { mapState, mapActions } from 'vuex'
 
 export default {
-  name: "MovieCreateFormModal",
+  name: 'movie-create-form-modal',
   data() {
     return {
-      dialog: false,
-      movie: {},
-      rules: {
-        required: value => !!value || "필수 입력 사항입니다."
-      }
-    };
-  },
-  methods: {
-    createMovie() {
-      const token = this.$session.get("jwt");
-      const options = {
-        headers: { Authorization: `JWT ${token}` }
-      };
-      axios
-        .post(
-          "http://localhost:8000/api/v1/movies/create/",
-          this.movie,
-          options
-        )
-        .then(res =>
-          router.push(`/admin-movie-list?${Date.now()}`).catch(err => {})
-        );
+      dialog: false
     }
-  }
-};
+  },
+  computed: mapState('movie', ['movieToAdd', 'requiredRule']),
+  methods: mapActions('movie', ['createMovie'])
+}
 </script>
 
-<style></style>
+<style>
+</style>

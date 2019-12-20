@@ -3,8 +3,15 @@ import MovieService from '@/services/MovieService'
 export const namespaced = true
 
 export const state = {
+  movieToAdd: {},
   movies: [],
-  moviesToSelect: []
+  movieGenres: [
+    {
+      id: 1
+    }
+  ],
+  moviesToSelect: [],
+  requiredRule: value => !!value || '필수 입력 사항입니다.'
 }
 
 export const mutations = {
@@ -29,7 +36,15 @@ export const actions = {
         alert('영화 정보를 가져오는데 실패했습니다.')
       })
   },
-
+  createMovie({ dispatch }) {
+    MovieService.createMovie()
+      .then(() => {
+        dispatch('getMovies')
+      })
+      .catch(() => {
+        alert('새 영화 등록에 실패했습니다')
+      })
+  },
   deleteMovieFromList({ commit }, movieId) {
     MovieService.deleteMovie(movieId)
       .then(() => {

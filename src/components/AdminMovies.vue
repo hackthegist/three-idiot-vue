@@ -39,6 +39,7 @@ export default {
     MovieCreateFormModal,
     MovieUpdateFormModal
   },
+
   computed: mapState('movie', ['movies']),
   methods: mapActions('movie', ['getMovies', 'deleteMovieFromList']),
   created() {

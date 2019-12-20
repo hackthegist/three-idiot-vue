@@ -19,6 +19,10 @@ export default {
     // return apiClient.get('/api/v1/movies/', setOptions())
     return apiClient.get('/movies/')
   },
+  createMovie() {
+    //  return apiClient.post(`/api/v1/movies/create/`, {}, setOptions())
+    return apiClient.post(`/movies/`)
+  },
   deleteMovie(movieId) {
     //  return apiClient.post(`/api/v1/movies/${movieId}/delete/`, {}, setOptions())
     return apiClient.delete(`/movies/${movieId}`)
