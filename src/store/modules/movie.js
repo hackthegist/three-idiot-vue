@@ -11,6 +11,7 @@ export const state = {
     }
   ],
   moviesToSelect: [],
+  selectedMovies: [],
   requiredRule: value => !!value || '필수 입력 사항입니다.'
 }
 
@@ -22,7 +23,16 @@ export const mutations = {
     state.movies = state.movies.filter(movie => movie.id !== movieId)
   },
   SET_MOVIES_TO_SELECT(state, moviesToSelect) {
-    state.moviesToSelect = moviesToSelect
+    state.moviesToSelect = []
+    for (let i = 0; i < 12; i = i + 3) {
+      state.moviesToSelect.push(moviesToSelect.slice(i, i + 3))
+    }
+    for (let i = 12; i < 24; i = i + 2) {
+      state.moviesToSelect.push(moviesToSelect.slice(i, i + 2))
+    }
+  },
+  SET_SELECTED_MOVIES(state, selectedMovies) {
+    state.selectedMovies = selectedMovies
   }
 }
 
@@ -63,6 +73,9 @@ export const actions = {
       .catch(() => {
         alert('선택할 영화 정보를 가져오는데 실패했습니다.')
       })
+  },
+  setSelectedMovies({ commit }, selectedMovies) {
+    commit('SET_SELECTED_MOVIES', selectedMovies)
   }
 }
 
