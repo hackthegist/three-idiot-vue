@@ -7,31 +7,16 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import router from "@/router";
 
 export default {
   name: "home",
-  components: {
-    // Header
-  },
-  data() {
-    return {};
-  },
-  methods: {
-    loggedIn() {
-      this.$session.start();
-
-      if (!this.$session.has("jwt")) {
-        router.push("/login");
-      } else {
-        this.$emit("loggedIn");
-        router.push("/").catch(err => {});
-      }
-    }
-  },
-
+  computed: mapState("user", {
+    loggedIn: user => user.isLoggedIn
+  }),
   mounted() {
-    this.loggedIn();
+    this.$store.dispatch("user/requireAuth");
   }
 };
 </script>

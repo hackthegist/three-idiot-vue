@@ -1,38 +1,24 @@
 <template>
   <v-app id="admin-movie-list">
-    <AdminMovies :movies="movies" @updated="getMovies" />
+    <AdminMovies />
   </v-app>
 </template>
 
 <script>
-import axios from "axios";
-import AdminMovies from "@/components/AdminMovies";
+import AdminMovies from '@/components/AdminMovies'
 
 export default {
-  name: "admin-movie-list",
+  name: 'admin-movie-list',
   components: {
     AdminMovies
   },
   data() {
     return {
-      dialog: false,
-      movies: []
-    };
-  },
-  methods: {
-    getMovies() {
-      this.$emit("loggedIn");
-      const token = this.$session.get("jwt");
-      const options = {
-        headers: { Authorization: `JWT ${token}` }
-      };
-      axios
-        .get("http://localhost:8000/api/v1/movies/", options)
-        .then(res => (this.movies = res.data));
+      dialog: false
     }
   },
   mounted() {
-    this.getMovies();
+    this.$store.dispatch('user/requireAuth')
   }
-};
+}
 </script>

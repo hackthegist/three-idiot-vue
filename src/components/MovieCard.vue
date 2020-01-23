@@ -8,13 +8,7 @@
 
 <script>
 export default {
-  name: "MovieCard",
-  data() {
-    return {
-      im:
-        "https://movie-phinf.pstatic.net/20190916_49/1568614827948hyiXA_JPEG/movie_image.jpg?type=m203_290_2"
-    };
-  },
+  name: "movie-card",
   props: {
     movie: Object
   }

@@ -2,69 +2,127 @@
   <div class="movie-list">
     <v-container>
       <div style="height: 100px;"></div>
-      <MovieCardRow
-        v-for="movies in movies3"
-        :key="movies.id"
-        :movies="movies.movie"
-        @selected="appendSelected"
-      />
+      <v-stepper v-model="e6" vertical>
+        <v-stepper-step :complete="e6 > 1" step="1">좋아하는 장르의 영화를 선택해주세요</v-stepper-step>
+
+        <v-stepper-content step="1">
+          <v-card color="grey lighten-1" class="mb-12">
+            <v-card class="mx-auto">
+              <SelectGroup
+                v-for="(movies, i) in moviesToSelect.slice(0, 4)"
+                :key="i"
+                :movies="movies"
+                :selected.sync="selectedMovies[i]"
+              />
+            </v-card>
+          </v-card>
+          <v-btn color="primary" @click="goNextStep">Continue</v-btn>
+        </v-stepper-content>
+
+        <v-stepper-step :complete="e6 > 2" step="2">좋아하는 국가의 영화를 선택해주세요</v-stepper-step>
+
+        <v-stepper-content step="2">
+          <v-card color="grey lighten-1" class="mb-12">
+            <v-card class="mx-auto">
+              <SelectGroup
+                v-for="(movies, i) in moviesToSelect.slice(4, 6)"
+                :key="i"
+                :movies="movies"
+                :selected.sync="selectedMovies[i]"
+              />
+            </v-card>
+          </v-card>
+
+          <v-btn color="primary" @click="goNextStep">Continue</v-btn>
+          <v-btn text @click="goPreviousStep">Cancel</v-btn>
+        </v-stepper-content>
+
+        <v-stepper-step :complete="e6 > 3" step="3">좋아하는 관람 등급의 영화를 선택해주세요</v-stepper-step>
+
+        <v-stepper-content step="3">
+          <v-card color="grey lighten-1" class="mb-12">
+            <v-card class="mx-auto">
+              <SelectGroup
+                v-for="(movies, i) in moviesToSelect.slice(6, 8)"
+                :key="i"
+                :movies="movies"
+                :selected.sync="selectedMovies[i]"
+              />
+            </v-card>
+          </v-card>
+          <v-btn color="primary" @click="goNextStep">Continue</v-btn>
+          <v-btn text @click="goPreviousStep">Cancel</v-btn>
+        </v-stepper-content>
+
+        <v-stepper-step step="4">View setup instructions</v-stepper-step>
+        <v-stepper-content step="4">
+          <v-card color="grey lighten-1" class="mb-12">
+            <v-card class="mx-auto">
+              <SelectGroup
+                v-for="(movies, i) in moviesToSelect.slice(8, 10)"
+                :key="i"
+                :movies="movies"
+                :selected.sync="selectedMovies[i]"
+              />
+            </v-card>
+          </v-card>
+          <v-btn color="primary" @click="validateAndSetSelectedMovies">Done!</v-btn>
+          <v-btn text @click="goPreviousStep">Cancel</v-btn>
+        </v-stepper-content>
+      </v-stepper>
+
       <v-row class="my-10" align="center" justify="center">
-        <v-btn @click="selectedAll" x-large>취향 분석 시작</v-btn>
+        <v-btn x-large>취향 분석 시작</v-btn>
       </v-row>
     </v-container>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-import router from "@/router";
-import MovieCardRow from "@/components/MovieCardRow";
+import { mapState, mapActions } from 'vuex'
+import SelectGroup from '@/components/SelectGroup'
 
 export default {
-  name: "MovieList",
+  name: 'movie-select',
   components: {
-    MovieCardRow
+    SelectGroup
   },
   data() {
     return {
-      movies3: [],
-      selectedMovies: []
-    };
-  },
-  methods: {
-    getMovies() {
-      const token = this.$session.get("jwt");
-      const options = {
-        headers: { Authorization: `JWT ${token}` }
-      };
-      axios
-        .get("http://localhost:8000/api/v1/movies/research/", options)
-        .then(res => {
-          const movies3 = [];
-          const movies = res.data;
-          for (let i = 0; i < 15; i += 3) {
-            const movie = {};
-            movie.id = i;
-            movie.movie = movies.slice(i, i + 3);
-            movies3.push(movie);
-          }
-          this.movies3 = movies3;
-        });
-    },
-    appendSelected(movie) {
-      console.log(movie);
-      this.selectedMovies.push(movie);
-      console.log(this.selectedMovies);
-    },
-    selectedAll() {
-      this.$session.set("selected", this.selectedMovies);
-      router.push("/movie-list").catch(err => {});
-      // this.$emit('selected', this.selectedMovies)
+      e6: 1,
+      selectedMovies: [],
+      fixedSelectedMovies: []
     }
   },
+  methods: {
+    goNextStep() {
+      if (
+        this.selectedMovies != [] &&
+        this.selectedMovies.every(elem => elem != undefined)
+      ) {
+        this.fixedSelectedMovies = this.selectedMovies.slice()
+        this.e6 = this.e6 + 1
+      } else {
+        alert('선택하지 않은 영화가 있어요!')
+      }
+    },
+    goPreviousStep() {
+      this.selectedMovies = this.fixedSelectedMovies.slice()
+      this.e6 = this.e6 - 1
+    },
+    validateAndSetSelectedMovies() {
+      if (this.selectedMovies.every(elem => elem != undefined)) {
+        this.setSelectedMovies(this.selectedMovies)
+      } else {
+        alert('선택하지 않은 영화가 있어요!')
+      }
+    },
+    ...mapActions('movie', ['getMoviesToSelect', 'setSelectedMovies'])
+  },
+  computed: mapState('movie', ['moviesToSelect']),
   mounted() {
-    this.$emit("loggedIn");
-    this.getMovies();
+    this.$store.dispatch('user/requireAuth')
+    this.getMoviesToSelect()
   }
-};
+}
 </script>

@@ -20,7 +20,7 @@
             <!-- <v-btn text outlined color="success">수정</v-btn> -->
           </td>
           <td>
-            <v-btn text outlined :value-id="movie.id" color="error" @click="deleteMovie">삭제</v-btn>
+            <v-btn text outlined color="error" @click="deleteMovieFromList(movie.id)">삭제</v-btn>
           </td>
         </tr>
       </tbody>
@@ -29,39 +29,23 @@
 </template>
 
 <script>
-import axios from "axios";
-import router from "@/router";
+import { mapState, mapActions } from 'vuex'
+import MovieCreateFormModal from '@/components/MovieCreateFormModal'
+import MovieUpdateFormModal from '@/components/MovieUpdateFormModal'
 
-import MovieCreateFormModal from "@/components/MovieCreateFormModal";
-import MovieUpdateFormModal from "@/components/MovieUpdateFormModal";
 export default {
-  name: "admin-movies",
+  name: 'admin-movies',
   components: {
     MovieCreateFormModal,
     MovieUpdateFormModal
   },
-  props: {
-    movies: Array
-  },
-  methods: {
-    deleteMovie(e) {
-      const movieId = e.target.parentNode.getAttribute("value-id");
-      const token = this.$session.get("jwt");
-      const options = {
-        headers: { Authorization: `JWT ${token}` }
-      };
-      axios
-        .post(
-          `http://localhost:8000/api/v1/movies/${movieId}/delete/`,
-          {},
-          options
-        )
-        .then(res => {
-          router.push(`/admin-movie-list?${movieId}`).catch(err => {});
-        });
-    }
+
+  computed: mapState('movie', ['movies']),
+  methods: mapActions('movie', ['getMovies', 'deleteMovieFromList']),
+  created() {
+    this.getMovies()
   }
-};
+}
 </script>
 
 <style></style>
